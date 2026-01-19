@@ -18,16 +18,19 @@
 
     <form method="POST" action="">
         <div class="form-group">
-            <label for="voltage">Voltage (V)</label>
+            <label for="voltage">Voltage</label>
             <input type="number" step="any" class="form-control" id="voltage" name="voltage" value="<?php echo isset($_POST['voltage']) ? $_POST['voltage'] : ''; ?>" placeholder="Eg. 240" required>
+            <label for="voltage (V)">Voltage (V)</label>
         </div>
         <div class="form-group">
-            <label for="current">Current (A)</label>
+            <label for="current">Current</label>
             <input type="number" step="any" class="form-control" id="current" name="current" value="<?php echo isset($_POST['current']) ? $_POST['current'] : ''; ?>" placeholder="Eg. 10" required>
+            <label for="ampere (A)">Ampere (A)</label>
         </div>
         <div class="form-group">
-            <label for="rate">Current Rate (sen/kWh)</label>
+            <label for="rate">Current Rate</label>
             <input type="number" step="any" class="form-control" id="rate" name="rate" value="<?php echo isset($_POST['rate']) ? $_POST['rate'] : ''; ?>" placeholder="Eg. 21.80" required>
+            <label for="sen/kWh">sen/kWh</label>
         </div>
         <div class="text-center">
             <button type="submit" name="calculate" class="btn btn-primary">Calculate</button>
