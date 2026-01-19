@@ -29,10 +29,27 @@
             <label for="rate">Current Rate (sen/kWh)</label>
             <input type="number" step="any" class="form-control" id="rate" name="rate" value="<?php echo isset($_POST['rate']) ? $_POST['rate'] : ''; ?>" placeholder="Eg. 21.80" required>
         </div>
-        <button type="submit" name="calculate" class="btn btn-primary">Calculate</button>
+        <div class="text-center">
+            <button type="submit" name="calculate" class="btn btn-primary">Calculate</button>
+        </div>
     </form>
 
     <?php
+    // Function to calculate Power (kW)
+    function calculatePower($voltage, $current) {
+        return ($voltage * $current) / 1000;
+    }
+
+    // Function to calculate Total Cost for a specific hour
+    function calculateTotalCost($power_kw, $rate_rm, $hour) {
+        $energy = $power_kw * $hour;
+        $total_cost = $energy * $rate_rm;
+        return [
+            'energy' => $energy,
+            'total' => $total_cost
+        ];
+    }
+
     if (isset($_POST['calculate'])) {
         $voltage = floatval($_POST['voltage']);
         $current = floatval($_POST['current']);
@@ -43,9 +60,8 @@
             echo '<div class="alert alert-danger mt-4"><b>Error!</b> Voltage, current, and rate must be positive numbers.</div>';
         } else {
         
-        // CALCULATIONS
-        // 1. Power in kW = (Voltage * Current) / 1000
-        $power_kw = ($voltage * $current) / 1000;
+        // 1. Calculate Power using Function
+        $power_kw = calculatePower($voltage, $current);
 
         // 2. Rate in RM = Rate (sen) / 100
         $rate_rm = $rate_sen / 100;
@@ -70,17 +86,14 @@
                 <?php
                 // Loop for 24 hours
                 for ($hour = 1; $hour <= 24; $hour++) {
-                    // Energy = Power (kW) * Hour
-                    $energy = $power_kw * $hour;
-                    
-                    // Total Cost = Energy (kWh) * Rate (RM)
-                    $total_cost = $energy * $rate_rm;
+                    // Calculate Energy and Cost using Function
+                    $result = calculateTotalCost($power_kw, $rate_rm, $hour);
                 ?>
                 <tr>
                     <td><?php echo $hour; ?></td>
                     <td><?php echo $hour; ?></td>
-                    <td><?php echo number_format($energy, 5); ?></td>
-                    <td><?php echo number_format($total_cost, 2); ?></td>
+                    <td><?php echo number_format($result['energy'], 5); ?></td>
+                    <td><?php echo number_format($result['total'], 2); ?></td>
                 </tr>
                 <?php } ?>
             </tbody>
